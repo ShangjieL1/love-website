@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>我们的恋爱小站 ❤️</title>
+  <meta name="description" content="一个只属于我们两个人的小站：恋爱计时、相册、点点滴滴和留言板。" />
+  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body>
+  <!-- 飘落的爱心 -->
+  <div id="hearts-layer" aria-hidden="true"></div>
+
+  <!-- 顶部导航 -->
+  <nav id="nav">
+    <div class="nav-inner">
+      <a class="nav-logo" href="#home">❤️ <span id="nav-title">我们的恋爱小站</span></a>
+      <div class="nav-links">
+        <a href="#home"    class="active">🏠 首页</a>
+        <a href="#album">📷 相册</a>
+        <a href="#timeline">💫 点点滴滴</a>
+        <a href="#list">✅ 恋爱清单</a>
+        <a href="#board">💬 留言板</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ===================== 首页 ===================== -->
+  <header id="home" class="hero">
+    <div class="hero-inner">
+      <div class="avatars">
+        <img id="avatar-him" class="avatar" src="assets/img/avatar1.svg" alt="他的头像" />
+        <div class="heart-beat">❤️</div>
+        <img id="avatar-her" class="avatar" src="assets/img/avatar2.svg" alt="她的头像" />
+      </div>
+      <h1 class="names">
+        <span id="name-him">大笨蛋</span>
+        <span class="amp">❤</span>
+        <span id="name-her">小可爱</span>
+      </h1>
+      <p class="hero-text" id="hero-text">愿有岁月可回首，且以深情共白头。</p>
+
+      <div class="since">🌷 自 <span id="since-date">2024-05-20</span> 起，我们已经相爱</div>
+
+      <!-- 恋爱计时 -->
+      <div class="timer" id="timer">
+        <div class="time-cell"><b id="t-years">0</b><i>年</i></div>
+        <div class="time-cell"><b id="t-months">0</b><i>个月</i></div>
+        <div class="time-cell"><b id="t-days">0</b><i>天</i></div>
+        <div class="time-cell"><b id="t-hours">00</b><i>时</i></div>
+        <div class="time-cell"><b id="t-mins">00</b><i>分</i></div>
+        <div class="time-cell"><b id="t-secs">00</b><i>秒</i></div>
+      </div>
+      <p class="total-days">这已经是我们一起走过的第 <b id="t-total">0</b> 天啦 ✨</p>
+
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#board">💌 给我留言</a>
+        <a class="btn btn-ghost" href="#album">📷 看看相册</a>
+      </div>
+    </div>
+    <div class="scroll-hint">⌄</div>
+  </header>
+
+  <main>
+    <!-- ===================== 相册 ===================== -->
+    <section id="album" class="section">
+      <h2 class="sec-title"><span>📷</span> 我们的相册 <small>每一张都想好好收藏</small></h2>
+      <div class="album-grid" id="album-grid"><!-- JS 渲染 --></div>
+    </section>
+
+    <!-- ===================== 时间线 ===================== -->
+    <section id="timeline" class="section alt">
+      <h2 class="sec-title"><span>💫</span> 点点滴滴 <small>把我们的故事记在这里</small></h2>
+      <div class="timeline" id="timeline-list"><!-- JS 渲染 --></div>
+    </section>
+
+    <!-- ===================== 恋爱清单 ===================== -->
+    <section id="list" class="section">
+      <h2 class="sec-title"><span>✅</span> 恋爱清单 <small>说好的，要一件一件完成</small></h2>
+      <div class="list-progress-wrap">
+        <div class="list-progress"><div class="list-progress-bar" id="list-progress-bar"></div></div>
+        <span id="list-progress-text">0 / 0</span>
+      </div>
+      <div class="check-grid" id="check-grid"><!-- JS 渲染 --></div>
+      <p class="list-tip">点一下卡片可以打勾哦（打勾记录保存在你自己的手机/电脑上）</p>
+    </section>
+
+    <!-- ===================== 留言板 ===================== -->
+    <section id="board" class="section alt">
+      <h2 class="sec-title"><span>💬</span> 留言板 <small>想对你说的话，都写在这里</small></h2>
+
+      <form class="board-form" id="board-form">
+        <input type="text" id="msg-name" maxlength="12" placeholder="你的名字（如：小可爱）" required />
+        <textarea id="msg-text" maxlength="200" rows="3" placeholder="写点什么吧…（最多 200 字）" required></textarea>
+        <div class="board-form-foot">
+          <span class="board-sync" id="board-sync"></span>
+          <button type="submit" class="btn btn-primary">📨 送上留言</button>
+        </div>
+      </form>
+
+      <div class="msg-wall" id="msg-wall"><!-- JS 渲染 --></div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p> —— 用 ❤ 为你而建 —— </p>
+    <p class="footer-sub">愿我们一直走下去，把日子过成诗 ✨</p>
+  </footer>
+
+  <!-- ===================== 音乐播放器 ===================== -->
+  <div id="music-player" title="音乐播放器">
+    <div class="vinyl" id="vinyl">
+      <span class="vinyl-note">♪</span>
+    </div>
+    <div class="music-info">
+      <div class="music-title" id="music-title">我们的歌</div>
+      <div class="music-ctrl">
+        <button id="music-prev" title="上一首">⏮</button>
+        <button id="music-toggle" title="播放 / 暂停">▶</button>
+        <button id="music-next" title="下一首">⏭</button>
+      </div>
+    </div>
+    <audio id="music-audio" loop preload="auto"></audio>
+  </div>
+  <div id="music-hint">🎧 点一下任意处，开启我们的BGM</div>
+
+  <!-- ===================== 图片查看器 ===================== -->
+  <div id="lightbox" class="hidden">
+    <button class="lb-close" id="lb-close">✕</button>
+    <button class="lb-arrow lb-prev" id="lb-prev">‹</button>
+    <figure>
+      <img id="lb-img" src="" alt="" />
+      <figcaption id="lb-cap"></figcaption>
+    </figure>
+    <button class="lb-arrow lb-next" id="lb-next">›</button>
+  </div>
+
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/main.js"></script>
+</body>
+</html>

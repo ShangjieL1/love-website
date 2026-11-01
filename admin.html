@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex" />
+  <title>管理后台 · 我们的恋爱小站</title>
+  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg" />
+  <style>
+    :root {
+      --pink: #ff8fab; --pink-deep: #ff5c8a; --rose: #e64980;
+      --ink: #5c3d4e; --ink-soft: #93707f; --card: rgba(255,255,255,.9);
+      --shadow: 0 10px 30px rgba(230,73,128,.12);
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: "PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(1200px 600px at 85% -5%, #ffd9e4 0%, transparent 60%),
+        linear-gradient(180deg, #fff5f7, #ffe8ef);
+      min-height:100vh; padding: 30px 16px 80px;
+    }
+    .wrap { max-width: 860px; margin: 0 auto; }
+    h1 { text-align:center; font-size:26px; margin-bottom:6px; }
+    .sub { text-align:center; color:var(--ink-soft); font-size:13.5px; margin-bottom:26px; }
+    .card {
+      background: var(--card); border-radius:18px; padding:22px; margin-bottom:18px;
+      box-shadow: var(--shadow); border:1px solid rgba(255,143,171,.2);
+    }
+    .card h2 { font-size:17px; margin-bottom:12px; color:var(--rose); }
+    .card p.desc { font-size:13px; color:var(--ink-soft); line-height:1.9; margin-bottom:12px; }
+    input[type=text], input[type=password], textarea, select {
+      width:100%; font-family:inherit; font-size:14px; color:var(--ink);
+      padding:11px 14px; border:1.5px solid rgba(255,143,171,.4); border-radius:12px;
+      outline:none; background:#fff; transition:border .2s;
+    }
+    input:focus, textarea:focus { border-color:var(--pink-deep); }
+    textarea { resize:vertical; line-height:1.7; }
+    textarea.json { min-height:340px; font-family:Consolas,Monaco,monospace; font-size:12.5px; }
+    .row { display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin-top:12px; }
+    .btn {
+      padding:10px 22px; border-radius:999px; font-size:14px; font-weight:700;
+      border:none; cursor:pointer; transition:all .2s; font-family:inherit;
+    }
+    .btn-p { color:#fff; background:linear-gradient(135deg,var(--pink),var(--pink-deep)); }
+    .btn-p:hover { transform:translateY(-2px); }
+    .btn-g { background:#fff; border:1.5px solid rgba(255,143,171,.6); color:var(--rose); }
+    .btn-d { background:#fff0f0; color:#c92a2a; border:1.5px solid #ffc9c9; }
+    .btn:disabled { opacity:.5; cursor:not-allowed; transform:none; }
+    .status { font-size:13px; margin-left:8px; }
+    .ok { color:#2f9e44; } .err { color:#c92a2a; } .muted { color:var(--ink-soft); }
+    .photo-item {
+      display:flex; align-items:center; gap:12px; padding:10px 12px; border-radius:12px;
+      background:#fff; border:1px solid rgba(255,143,171,.25); margin-bottom:8px; font-size:13.5px;
+    }
+    .photo-item img { width:74px; height:56px; object-fit:cover; border-radius:8px; }
+    .photo-item .nm { flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .photo-item .nm b { display:block; }
+    .photo-item .nm i { font-style:normal; color:var(--ink-soft); font-size:12px; }
+    details { margin-top:10px; }
+    summary { cursor:pointer; font-size:13.5px; color:var(--rose); font-weight:700; }
+    ol { margin:10px 0 0 22px; font-size:13px; color:var(--ink-soft); line-height:2; }
+    a { color: var(--rose); }
+    .top-link { display:inline-block; margin-bottom:18px; font-size:14px; font-weight:700; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <a class="top-link" href="index.html">← 回到我们的小站</a>
+    <h1>🔧 管理后台</h1>
+    <p class="sub">改名字/纪念日/时间线/清单 · 上传照片 · 管理留言（改动会同步到云端，所有人生效）</p>
+
+    <!-- 1. 密钥 -->
+    <div class="card">
+      <h2>🔑 第一步：GitHub 访问令牌（留言密钥）</h2>
+      <p class="desc">
+        网站的「留言板」和这里的所有修改，都要用一把钥匙写入云端（GitHub 仓库）。<br>
+        <b>这把钥匙只保存在你自己的浏览器里，不会出现在网页代码中。</b>你和对方各设置一次即可。
+      </p>
+      <details>
+        <summary>📖 点开查看：如何生成钥匙（约 1 分钟）</summary>
+        <ol>
+          <li>浏览器打开 <a href="https://github.com/settings/personal-access-tokens/new" target="_blank">github.com → Settings → Developer settings → Fine-grained tokens → Generate new token</a></li>
+          <li>Token name 随便填（如 <b>love-website</b>），Expiration 选 90 天或 1 年</li>
+          <li><b>Repository access</b> 选 "Only select repositories"，勾选 <b>love-website</b></li>
+          <li><b>Permissions → Repository permissions → Contents</b> 设为 <b>Read and write</b>（其余不动）</li>
+          <li>点 Generate token，复制生成的令牌（ghp_ 开头），粘贴到下面保存</li>
+        </ol>
+      </details>
+      <div class="row">
+        <input type="password" id="token" placeholder="粘贴 GitHub 令牌（ghp_ 或 github_pat_ 开头）" />
+        <button class="btn btn-p" id="token-save">保存钥匙</button>
+        <button class="btn btn-g" id="token-test">测试钥匙</button>
+        <button class="btn btn-d" id="token-clear">删除本机钥匙</button>
+      </div>
+      <div class="row"><span class="status muted" id="token-status"></span></div>
+    </div>
+
+    <!-- 2. 内容编辑 -->
+    <div class="card">
+      <h2>✏️ 第二步：编辑站点内容</h2>
+      <p class="desc">下面是整个网站的内容（JSON 格式）：名字、纪念日、首页文案、相册、时间线、清单都在这里。改完点保存即可全站生效。</p>
+      <textarea class="json" id="data-json" spellcheck="false"></textarea>
+      <div class="row">
+        <button class="btn btn-g" id="data-load">从云端重新加载</button>
+        <button class="btn btn-p" id="data-save">保存到云端</button>
+        <span class="status" id="data-status"></span>
+      </div>
+    </div>
+
+    <!-- 3. 照片 -->
+    <div class="card">
+      <h2>📷 第三步：上传照片</h2>
+      <p class="desc">选一张或多张照片上传，会自动放进相册并更新首页。</p>
+      <input type="file" id="photo-input" accept="image/*" multiple />
+      <div class="row">
+        <button class="btn btn-p" id="photo-upload">上传所选照片</button>
+        <button class="btn btn-g" id="photo-refresh">刷新照片列表</button>
+        <span class="status" id="photo-status"></span>
+      </div>
+      <div id="photo-list" style="margin-top:14px;"></div>
+    </div>
+
+    <!-- 4. 留言 -->
+    <div class="card">
+      <h2>💬 留言管理</h2>
+      <p class="desc">留言保存在仓库的 data/messages.json，所有设备自动同步。在这里可以查看或清空。</p>
+      <div class="row">
+        <button class="btn btn-g" id="msg-load">查看留言</button>
+        <button class="btn btn-d" id="msg-clear">清空所有留言</button>
+        <span class="status" id="msg-status"></span>
+      </div>
+      <textarea class="json" id="msg-json" spellcheck="false" style="min-height:220px; display:none;"></textarea>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      "use strict";
+      var $ = function (s) { return document.querySelector(s); };
+      var CFG = window.__CONFIG__ || { owner: "ShangjieL1", name: "love-website", branch: "main" };
+      var KEY_LS = "love_github_key";
+      var DATA_PATH = "assets/js/data.js", MSG_PATH = "data/messages.json";
+
+      function key() { return localStorage.getItem(KEY_LS) || ""; }
+      function stat(id, txt, cls) { var el = $(id); el.textContent = txt; el.className = "status " + (cls || ""); }
+      function b64utf8(str) {
+        var bytes = new TextEncoder().encode(str), bin = "";
+        bytes.forEach(function (b) { bin += String.fromCharCode(b); });
+        return btoa(bin);
+      }
+      function unb64utf8(b64) {
+        var bin = atob(b64.replace(/\s/g, "")); var bytes = new Uint8Array(bin.length);
+        for (var i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+        return new TextDecoder().decode(bytes);
+      }
+      /* GitHub Contents API 封装 */
+      function gh(path, method, body) {
+        return fetch("https://api.github.com/repos/" + CFG.owner + "/" + CFG.name + "/contents/" + path + "?ref=" + CFG.branch, {
+          method: method || "GET",
+          headers: { "Authorization": "Bearer " + key(), "Accept": "application/vnd.github+json", "Content-Type": "application/json" },
+          body: body ? JSON.stringify(body) : undefined
+        }).then(function (r) {
+          if (r.status === 401) throw new Error("钥匙无效或过期，请重新生成");
+          if (r.status === 403) throw new Error("钥匙权限不足（需要 love-website 仓库的 Contents 读写权限）");
+          if (r.status === 404) return { notfound: true };
+          if (!r.ok) throw new Error("GitHub " + r.status);
+          return r.json();
+        });
+      }
+      function putFile(path, text, msg) {
+        return gh(path).then(function (info) {
+          var body = { message: msg, content: b64utf8(text), branch: CFG.branch };
+          if (info && info.sha) body.sha = info.sha;
+          return gh(path, "PUT", body);
+        });
+      }
+
+      /* -------- 密钥 -------- */
+      $("#token-save").onclick = function () {
+        var v = $("#token").value.trim();
+        if (!v) return stat("#token-status", "请先粘贴令牌", "err");
+        localStorage.setItem(KEY_LS, v);
+        stat("#token-status", "钥匙已保存到本机 ✓", "ok");
+      };
+      $("#token-clear").onclick = function () {
+        localStorage.removeItem(KEY_LS); $("#token").value = "";
+        stat("#token-status", "已删除本机钥匙", "muted");
+      };
+      $("#token-test").onclick = function () {
+        if (!key()) return stat("#token-status", "还没有保存钥匙", "err");
+        stat("#token-status", "测试中…");
+        gh(DATA_PATH).then(function () {
+          stat("#token-status", "钥匙有效，可以读写仓库 ✓", "ok");
+        }).catch(function (e) { stat("#token-status", e.message, "err"); });
+      };
+
+      /* -------- 内容编辑 -------- */
+      function parseDataJs(text) {
+        var m = text.match(/window\.SITE_DATA\s*=\s*([\s\S]*?);\s*$/);
+        if (!m) throw new Error("data.js 格式不对");
+        return JSON.parse(m[1]);
+      }
+      function loadData() {
+        stat("#data-status", "加载中…");
+        gh(DATA_PATH).then(function (info) {
+          var data = parseDataJs(unb64utf8(info.content));
+          $("#data-json").value = JSON.stringify(data, null, 2);
+          stat("#data-status", "已加载（" + new Date().toLocaleTimeString() + "）", "ok");
+        }).catch(function (e) { stat("#data-status", e.message, "err"); });
+      }
+      $("#data-load").onclick = loadData;
+      $("#data-save").onclick = function () {
+        var json;
+        try { json = JSON.parse($("#data-json").value); }
+        catch (e) { return stat("#data-status", "JSON 格式有误：" + e.message, "err"); }
+        stat("#data-status", "保存中…");
+        putFile(DATA_PATH, "/* 本文件由管理后台自动生成维护 */\nwindow.SITE_DATA = " + JSON.stringify(json, null, 2) + ";\n", "✏️ 更新站点内容")
+          .then(function () { stat("#data-status", "已保存，全站生效 ✓（页面刷新后可见）", "ok"); })
+          .catch(function (e) { stat("#data-status", e.message, "err"); });
+      };
+
+      /* -------- 照片 -------- */
+      var photos = [];
+      function renderPhotos() {
+        var box = $("#photo-list");
+        box.innerHTML = "";
+        photos.forEach(function (p) {
+          var item = document.createElement("div"); item.className = "photo-item";
+          var img = document.createElement("img"); img.src = p.src;
+          var nm = document.createElement("div"); nm.className = "nm";
+          var b = document.createElement("b"); b.textContent = p.caption || "(无说明)";
+          var i = document.createElement("i"); i.textContent = p.src;
+          nm.appendChild(b); nm.appendChild(i);
+          var del = document.createElement("button"); del.className = "btn btn-d"; del.textContent = "删除";
+          del.onclick = function () {
+            if (!confirm("确定删除这张照片吗？")) return;
+            stat("#photo-status", "删除中…");
+            gh(p.src.replace(/^assets\//, "assets/")).then(function (info) {
+              return gh(p.src, "DELETE", { message: "🗑 删除照片", sha: info.sha, branch: CFG.branch });
+            }).then(function () {
+              return gh(DATA_PATH).then(function (info2) {
+                var data = parseDataJs(unb64utf8(info2.content));
+                data.album = data.album.filter(function (a) { return a.src !== p.src; });
+                return putFile(DATA_PATH, "/* 本文件由管理后台自动生成维护 */\nwindow.SITE_DATA = " + JSON.stringify(data, null, 2) + ";\n", "🗑 从相册移除照片");
+              });
+            }).then(function () {
+              stat("#photo-status", "已删除 ✓", "ok"); loadPhotos();
+            }).catch(function (e) { stat("#photo-status", e.message, "err"); });
+          };
+          item.appendChild(img); item.appendChild(nm); item.appendChild(del);
+          box.appendChild(item);
+        });
+      }
+      function loadPhotos() {
+        stat("#photo-status", "加载中…");
+        gh(DATA_PATH).then(function (info) {
+          var data = parseDataJs(unb64utf8(info.content));
+          photos = data.album || [];
+          renderPhotos();
+          stat("#photo-status", "共 " + photos.length + " 张照片", "ok");
+        }).catch(function (e) { stat("#photo-status", e.message, "err"); });
+      }
+      $("#photo-refresh").onclick = loadPhotos;
+      $("#photo-upload").onclick = function () {
+        var files = $("#photo-input").files;
+        if (!files.length) return stat("#photo-status", "请先选择照片", "err");
+        if (!key()) return stat("#photo-status", "请先在上面保存钥匙", "err");
+        stat("#photo-status", "上传中 0/" + files.length + "…");
+        var done = 0;
+        var chain = Promise.resolve();
+        Array.prototype.forEach.call(files, function (file) {
+          chain = chain.then(function () {
+            return new Promise(function (resolve) {
+              var rd = new FileReader();
+              rd.onload = function () {
+                var b64 = rd.result.split(",")[1];
+                var safe = file.name.replace(/[^\w.\-\u4e00-\u9fa5]/g, "_");
+                var path = "assets/img/photos/" + Date.now() + "-" + safe;
+                gh(path).then(function (info) {
+                  var body = { message: "📷 上传照片 " + safe, content: b64, branch: CFG.branch };
+                  if (info && info.sha) body.sha = info.sha;
+                  return gh(path, "PUT", body);
+                }).then(function () {
+                  return gh(DATA_PATH).then(function (info2) {
+                    var data = parseDataJs(unb64utf8(info2.content));
+                    data.album = data.album || [];
+                    data.album.push({ src: path, caption: file.name.replace(/\.[^.]+$/, ""), date: new Date().toISOString().slice(0, 10) });
+                    return putFile(DATA_PATH, "/* 本文件由管理后台自动生成维护 */\nwindow.SITE_DATA = " + JSON.stringify(data, null, 2) + ";\n", "📷 相册新增照片");
+                  });
+                }).then(function () {
+                  done++; stat("#photo-status", "上传中 " + done + "/" + files.length + "…"); resolve();
+                }).catch(function (e) { stat("#photo-status", e.message, "err"); resolve(); });
+              };
+              rd.readAsDataURL(file);
+            });
+          });
+        });
+        chain.then(function () {
+          stat("#photo-status", "全部完成 ✓ 记得点「刷新照片列表」", "ok");
+          $("#photo-input").value = "";
+          loadPhotos();
+        });
+      };
+
+      /* -------- 留言 -------- */
+      $("#msg-load").onclick = function () {
+        stat("#msg-status", "加载中…");
+        gh(MSG_PATH).then(function (info) {
+          var box = $("#msg-json");
+          box.style.display = "block";
+          box.value = info.notfound ? "[]" : unb64utf8(info.content);
+          try { box.value = JSON.stringify(JSON.parse(box.value), null, 2); } catch (e) { }
+          stat("#msg-status", "共 " + JSON.parse(box.value).length + " 条留言", "ok");
+        }).catch(function (e) { stat("#msg-status", e.message, "err"); });
+      };
+      $("#msg-clear").onclick = function () {
+        if (!confirm("确定清空所有留言吗？此操作不可恢复。")) return;
+        stat("#msg-status", "清空中…");
+        putFile(MSG_PATH, "[]", "💬 清空留言板").then(function () {
+          stat("#msg-status", "已清空 ✓", "ok"); $("#msg-json").style.display = "none";
+        }).catch(function (e) { stat("#msg-status", e.message, "err"); });
+      };
+
+      /* -------- 初始化 -------- */
+      if (key()) { $("#token").placeholder = "已保存钥匙（留空则不修改）"; stat("#token-status", "本机已保存钥匙 ✓", "ok"); }
+      loadData();
+      loadPhotos();
+    })();
+  </script>
+</body>
+</html>
