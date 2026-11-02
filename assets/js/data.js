@@ -7,11 +7,11 @@ window.SITE_DATA = {
   title: "我们的恋爱小站",
 
   /* 两个人的名字和头像（头像可替换 assets/img/avatar1.svg / avatar2.svg） */
-  him:  { name: "大笨蛋", avatar: "assets/img/avatar1.svg" },
-  her:  { name: "小可爱", avatar: "assets/img/avatar2.svg" },
+  him:  { name: "作业本", avatar: "assets/img/avatar1.svg" },
+  her:  { name: "海鲜酱", avatar: "assets/img/avatar2.svg" },
 
   /* 在一起的纪念日（恋爱计时从这里开始算） */
-  startDate: "2024-05-20",
+  startDate: "2026-10-01",
 
   /* 首页大屏幕上的一句话 */
   heroText: "愿有岁月可回首，且以深情共白头。",
@@ -23,12 +23,12 @@ window.SITE_DATA = {
 
   /* 相册：src 是图片路径，caption 是说明，date 是日期 */
   album: [
-    { src: "assets/img/photos/p1.svg", caption: "初见 · 人海之中遇见你", date: "2024-05-20" },
-    { src: "assets/img/photos/p2.svg", caption: "第一次牵手 · 心跳加速的那天", date: "2024-05-21" },
-    { src: "assets/img/photos/p3.svg", caption: "第一次一起看海 · 风很甜", date: "2024-06-15" },
-    { src: "assets/img/photos/p4.svg", caption: "一起做的第一顿饭 · 有点糊但好吃", date: "2024-07-02" },
-    { src: "assets/img/photos/p5.svg", caption: "傍晚的摩天轮 · 我们的心愿", date: "2024-08-20" },
-    { src: "assets/img/photos/p6.svg", caption: "第一场雪 · 手牵手取暖", date: "2024-12-13" }
+    { src: "assets/img/photos/p1.svg", caption: "初见 · 人海之中遇见你", date: "2026-10-01" },
+    { src: "assets/img/photos/p2.svg", caption: "第一次牵手 · 心跳加速的那天", date: "2026-10-02" },
+    { src: "assets/img/photos/p3.svg", caption: "第一次一起看海 · 风很甜", date: "2026-10-15" },
+    { src: "assets/img/photos/p4.svg", caption: "一起做的第一顿饭 · 有点糊但好吃", date: "2026-10-20" },
+    { src: "assets/img/photos/p5.svg", caption: "傍晚的摩天轮 · 我们的心愿", date: "2026-10-25" },
+    { src: "assets/img/photos/p6.svg", caption: "第一场雪 · 手牵手取暖", date: "2026-12-13" }
   ],
 
   /* 点点滴滴 · 时间线（icon 用 emoji 即可） */
